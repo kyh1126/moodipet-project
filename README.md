@@ -5,7 +5,7 @@ MoodiPet는 사용자의 감정을 기록하고, 연속 활동에 대한 보상�
 ## 🚀 프로젝트 구조
 
 ```
-moodpet-project/
+moodipet-project/
 ├── contracts/          # 스마트 컨트랙트
 │   ├── NFT.sol        # MoodiPet NFT 컨트랙트
 │   └── HealingToken.sol # Healing Token 컨트랙트
