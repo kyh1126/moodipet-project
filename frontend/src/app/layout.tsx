@@ -1,7 +1,9 @@
+import '@rainbow-me/rainbowkit/styles.css';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
+import WagmiProviders from "./providers/WagmiProviders";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +28,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="bg-gray-50 min-h-screen">
-        <Navbar />
-        <main className="max-w-3xl mx-auto p-4">{children}</main>
+        <WagmiProviders>
+          <Navbar />
+          <main className="max-w-3xl mx-auto p-4">{children}</main>
+        </WagmiProviders>
       </body>
     </html>
   );

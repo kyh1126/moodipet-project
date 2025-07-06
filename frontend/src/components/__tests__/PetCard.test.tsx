@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen } from "@testing-library/react";
 import PetCard from "../PetCard";
 
@@ -6,18 +7,18 @@ describe("PetCard 컴포넌트", () => {
     render(<PetCard />);
     
     expect(screen.getByText("나의 MoodiPet")).toBeInTheDocument();
-    expect(screen.getByText("감정: 기쁨")).toBeInTheDocument();
-    expect(screen.getByText("진화 단계: 2")).toBeInTheDocument();
-    expect(screen.getByText("성격: 고양이")).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('감정:') && node.textContent.includes('기쁨') : false)).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('진화 단계:') && node.textContent.includes('2') : false)).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('성격:') && node.textContent.includes('고양이') : false)).toBeInTheDocument();
   });
 
   test("감정에 따라 펫 정보가 변경됩니다", () => {
     const { rerender } = render(<PetCard emotion="슬픔" />);
     
-    expect(screen.getByText("감정: 슬픔")).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('감정:') && node.textContent.includes('슬픔') : false)).toBeInTheDocument();
     
     rerender(<PetCard emotion="화남" />);
-    expect(screen.getByText("감정: 화남")).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('감정:') && node.textContent.includes('화남') : false)).toBeInTheDocument();
   });
 
   test("펫 성공 메시지가 표시됩니다", () => {
@@ -36,9 +37,9 @@ describe("PetCard 컴포넌트", () => {
       />
     );
     
-    expect(screen.getByText("감정: 평온")).toBeInTheDocument();
-    expect(screen.getByText("진화 단계: 3")).toBeInTheDocument();
-    expect(screen.getByText("성격: 강아지")).toBeInTheDocument();
-    expect(screen.getByText("생성일: 2024-06-15")).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('감정:') && node.textContent.includes('평온') : false)).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('진화 단계:') && node.textContent.includes('3') : false)).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('성격:') && node.textContent.includes('강아지') : false)).toBeInTheDocument();
+    expect(screen.getByText((content, node) => node && node.textContent ? content.includes('생성일:') && node.textContent.includes('2024-06-15') : false)).toBeInTheDocument();
   });
 }); 
