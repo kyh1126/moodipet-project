@@ -10,16 +10,20 @@ export default function EggCard({ emotion = "기쁨", evolution = 1, isHatching 
   // 감정에 따른 알 색상 결정
   const getEggColor = (emotion: string) => {
     switch (emotion) {
-      case "기쁨":
+      case "행복":
         return "#FFE5B4"; // 연노랑
-      case "슬픔":
-        return "#E6F3FF"; // 연파랑
-      case "화남":
-        return "#FFE6E6"; // 연빨강
-      case "평온":
-        return "#E6FFE6"; // 연초록
       case "우울":
+        return "#E6F3FF"; // 연파랑
+      case "분노":
+        return "#FFE6E6"; // 연빨강
+      case "불안":
+        return "#FFF2E6"; // 연주황
+      case "설렘":
+        return "#E6FFE6"; // 연초록
+      case "지루함":
         return "#F0E6FF"; // 연보라
+      case "허무":
+        return "#F5F5F5"; // 연회색
       default:
         return "#FFE5B4";
     }
@@ -98,7 +102,7 @@ export default function EggCard({ emotion = "기쁨", evolution = 1, isHatching 
       {/* 알 상태 안내 */}
       <div className="mt-4 p-3 bg-blue-50 rounded-lg">
         <p className="text-sm text-blue-700">
-          감정을 기록하면 알이 성장하고, 충분한 감정 기록 후 펫으로 부화됩니다!
+          감정을 기록하면 알이 성장하고, 충분한 감정 기록 후 슬라임으로 부화됩니다!
         </p>
       </div>
     </div>

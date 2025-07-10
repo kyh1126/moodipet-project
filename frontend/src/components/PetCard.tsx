@@ -3,177 +3,207 @@ import React from "react";
 interface PetCardProps {
   emotion?: string;
   evolution?: number;
-  personality?: string;
-  createdAt?: string;
+  ment?: string;
 }
 
-export default function PetCard({ 
-  emotion = "기쁨", 
-  evolution = 2, 
-  personality = "고양이",
-  createdAt = "2024-06-01"
-}: PetCardProps) {
-  // 감정에 따른 펫 색상과 표정 결정
-  const getPetStyle = (emotion: string) => {
+export default function PetCard({ emotion = "행복", evolution = 3, ment = "" }: PetCardProps) {
+  // 감정에 따른 슬라임 스타일 결정
+  const getSlimeStyle = (emotion: string) => {
     switch (emotion) {
-      case "기쁨":
+      case "행복":
         return {
-          color: "#FFD700", // 노랑
-          expression: "happy",
-          eyeColor: "#4A90E2"
-        };
-      case "슬픔":
-        return {
-          color: "#87CEEB", // 하늘색
-          expression: "sad",
-          eyeColor: "#6B7280"
-        };
-      case "화남":
-        return {
-          color: "#FF6B6B", // 빨강
-          expression: "angry",
-          eyeColor: "#DC2626"
-        };
-      case "평온":
-        return {
-          color: "#98FB98", // 연초록
-          expression: "calm",
-          eyeColor: "#10B981"
+          color: "#FFD700", // 골드
+          eyeColor: "#333",
+          mouthType: "happy",
+          accessories: ["crown", "sparkles"]
         };
       case "우울":
         return {
-          color: "#DDA0DD", // 연보라
-          expression: "depressed",
-          eyeColor: "#8B5CF6"
+          color: "#87CEEB", // 하늘색
+          eyeColor: "#333",
+          mouthType: "sad",
+          accessories: ["tear", "cloud"]
+        };
+      case "분노":
+        return {
+          color: "#FF6B6B", // 빨간색
+          eyeColor: "#FF0000",
+          mouthType: "angry",
+          accessories: ["fire", "lightning"]
+        };
+      case "불안":
+        return {
+          color: "#FFB347", // 주황색
+          eyeColor: "#333",
+          mouthType: "worried",
+          accessories: ["question", "sweat"]
+        };
+      case "설렘":
+        return {
+          color: "#98FB98", // 연두색
+          eyeColor: "#333",
+          mouthType: "excited",
+          accessories: ["star", "rainbow"]
+        };
+      case "지루함":
+        return {
+          color: "#DDA0DD", // 연보라색
+          eyeColor: "#333",
+          mouthType: "bored",
+          accessories: ["zzz", "bubble"]
+        };
+      case "허무":
+        return {
+          color: "#D3D3D3", // 회색
+          eyeColor: "#666",
+          mouthType: "empty",
+          accessories: ["void", "dots"]
         };
       default:
         return {
-          color: "#FFD700",
-          expression: "happy",
-          eyeColor: "#4A90E2"
+          color: "#B4E7FF",
+          eyeColor: "#333",
+          mouthType: "normal",
+          accessories: []
         };
     }
   };
 
-  const petStyle = getPetStyle(emotion);
+  const slimeStyle = getSlimeStyle(emotion);
 
-  // 펫 표정 렌더링
-  const renderPetExpression = (expression: string) => {
-    switch (expression) {
-      case "happy":
+  // 액세서리 렌더링 함수
+  const renderAccessories = () => {
+    const { accessories } = slimeStyle;
+    
         return (
           <>
-            {/* 기쁜 눈 */}
-            <circle cx="35" cy="45" r="3" fill={petStyle.eyeColor} />
-            <circle cx="65" cy="45" r="3" fill={petStyle.eyeColor} />
-            {/* 기쁜 입 (웃음) */}
-            <path d="M 40 60 Q 50 70 60 60" stroke="#FF6B9D" strokeWidth="2" fill="none" />
+        {accessories.includes("crown") && (
+          <path d="M 30 40 L 50 30 L 70 40 L 65 35 L 50 25 L 35 35 Z" fill="#FFD700" />
+        )}
+        {accessories.includes("sparkles") && (
+          <>
+            <circle cx="25" cy="25" r="2" fill="#FFF" />
+            <circle cx="75" cy="25" r="2" fill="#FFF" />
+            <circle cx="20" cy="70" r="1.5" fill="#FFF" />
+            <circle cx="80" cy="70" r="1.5" fill="#FFF" />
+          </>
+        )}
+        {accessories.includes("tear") && (
+          <ellipse cx="45" cy="70" rx="2" ry="4" fill="#87CEEB" />
+        )}
+        {accessories.includes("cloud") && (
+          <ellipse cx="75" cy="30" rx="8" ry="5" fill="#E6F3FF" />
+        )}
+        {accessories.includes("fire") && (
+          <path d="M 30 35 L 35 25 L 40 35 L 35 30 Z" fill="#FF4500" />
+        )}
+        {accessories.includes("lightning") && (
+          <path d="M 70 25 L 65 35 L 70 40 L 75 35 Z" fill="#FFD700" />
+        )}
+        {accessories.includes("question") && (
+          <text x="75" y="30" fill="#FFB347" fontSize="12">?</text>
+        )}
+        {accessories.includes("sweat") && (
+          <ellipse cx="75" cy="25" rx="3" ry="2" fill="#FFB347" />
+        )}
+        {accessories.includes("star") && (
+          <path d="M 50 20 L 52 25 L 57 25 L 53 28 L 55 33 L 50 30 L 45 33 L 47 28 L 43 25 L 48 25 Z" fill="#FFD700" />
+        )}
+        {accessories.includes("rainbow") && (
+          <path d="M 20 60 Q 50 50 80 60" stroke="#FF69B4" strokeWidth="2" fill="none" />
+        )}
+        {accessories.includes("zzz") && (
+          <>
+            <text x="75" y="25" fill="#DDA0DD" fontSize="12">z</text>
+            <text x="78" y="22" fill="#DDA0DD" fontSize="10">z</text>
+            <text x="81" y="19" fill="#DDA0DD" fontSize="8">z</text>
+          </>
+        )}
+        {accessories.includes("bubble") && (
+          <ellipse cx="25" cy="30" rx="4" ry="3" fill="#DDA0DD" opacity="0.6" />
+        )}
+        {accessories.includes("void") && (
+          <circle cx="50" cy="50" r="15" fill="#000" opacity="0.1" />
+        )}
+        {accessories.includes("dots") && (
+          <>
+            <circle cx="25" cy="25" r="1" fill="#666" />
+            <circle cx="75" cy="25" r="1" fill="#666" />
+            <circle cx="50" cy="75" r="1" fill="#666" />
+          </>
+        )}
           </>
         );
-      case "sad":
+  };
+
+  // 표정 렌더링 함수
+  const renderExpression = () => {
+    const { mouthType } = slimeStyle;
+    
         return (
           <>
-            {/* 슬픈 눈 */}
-            <circle cx="35" cy="45" r="3" fill={petStyle.eyeColor} />
-            <circle cx="65" cy="45" r="3" fill={petStyle.eyeColor} />
-            {/* 슬픈 입 (우는 표정) */}
-            <path d="M 40 70 Q 50 60 60 70" stroke="#FF6B9D" strokeWidth="2" fill="none" />
+        {/* 눈 */}
+        <circle cx="38" cy="55" r="4" fill={slimeStyle.eyeColor} />
+        <circle cx="62" cy="55" r="4" fill={slimeStyle.eyeColor} />
+        
+        {/* 입 */}
+        {mouthType === "happy" && (
+          <ellipse cx="50" cy="65" rx="8" ry="4" fill="#fff" />
+        )}
+        {mouthType === "sad" && (
+          <ellipse cx="50" cy="68" rx="8" ry="4" fill="#fff" />
+        )}
+        {mouthType === "angry" && (
+          <path d="M 42 65 L 58 65 M 42 67 L 58 67" stroke="#fff" strokeWidth="2" />
+        )}
+        {mouthType === "worried" && (
+          <ellipse cx="50" cy="67" rx="6" ry="2" fill="#fff" />
+        )}
+        {mouthType === "excited" && (
+          <ellipse cx="50" cy="63" rx="10" ry="6" fill="#fff" />
+        )}
+        {mouthType === "bored" && (
+          <ellipse cx="50" cy="65" rx="6" ry="1" fill="#fff" />
+        )}
+        {mouthType === "empty" && (
+          <ellipse cx="50" cy="65" rx="4" ry="1" fill="#fff" />
+        )}
+        {mouthType === "normal" && (
+          <ellipse cx="50" cy="65" rx="6" ry="3" fill="#fff" />
+        )}
           </>
         );
-      case "angry":
-        return (
-          <>
-            {/* 화난 눈 */}
-            <circle cx="35" cy="45" r="3" fill={petStyle.eyeColor} />
-            <circle cx="65" cy="45" r="3" fill={petStyle.eyeColor} />
-            {/* 화난 입 */}
-            <path d="M 40 65 L 60 65" stroke="#FF6B9D" strokeWidth="2" />
-          </>
-        );
-      case "calm":
-        return (
-          <>
-            {/* 평온한 눈 */}
-            <circle cx="35" cy="45" r="3" fill={petStyle.eyeColor} />
-            <circle cx="65" cy="45" r="3" fill={petStyle.eyeColor} />
-            {/* 평온한 입 */}
-            <path d="M 40 65 Q 50 65 60 65" stroke="#FF6B9D" strokeWidth="2" fill="none" />
-          </>
-        );
-      case "depressed":
-        return (
-          <>
-            {/* 우울한 눈 */}
-            <circle cx="35" cy="45" r="3" fill={petStyle.eyeColor} />
-            <circle cx="65" cy="45" r="3" fill={petStyle.eyeColor} />
-            {/* 우울한 입 */}
-            <path d="M 40 70 Q 50 65 60 70" stroke="#FF6B9D" strokeWidth="2" fill="none" />
-          </>
-        );
-      default:
-        return (
-          <>
-            <circle cx="35" cy="45" r="3" fill={petStyle.eyeColor} />
-            <circle cx="65" cy="45" r="3" fill={petStyle.eyeColor} />
-            <path d="M 40 60 Q 50 70 60 60" stroke="#FF6B9D" strokeWidth="2" fill="none" />
-          </>
-        );
-    }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
-      <div className="font-bold text-blue-700 text-lg mb-4">나의 MoodiPet</div>
+    <div className="bg-white rounded-2xl shadow-lg p-6 border border-blue-100 flex flex-col items-center">
+              <div className="font-bold text-blue-700 text-lg mb-4">나의 MoodiPet 슬라임 완성체</div>
       
-      {/* 펫 일러스트 */}
-      <div className="flex justify-center mb-4">
-        <div className="relative">
-          <svg width="120" height="120" viewBox="0 0 120 120">
-            {/* 고양이 머리 */}
-            <circle
-              cx="60"
-              cy="60"
-              r="40"
-              fill={petStyle.color}
-              stroke="#8B4513"
+      {/* 슬라임 SVG */}
+      <svg width="100" height="80" viewBox="0 0 100 80">
+        {/* 슬라임 본체 */}
+        <ellipse 
+          cx="50" 
+          cy="55" 
+          rx="40" 
+          ry="25" 
+          fill={slimeStyle.color} 
+          stroke="#4FC3F7" 
               strokeWidth="2"
             />
             
-            {/* 고양이 귀 */}
-            <path d="M 30 30 L 25 15 L 35 25 Z" fill={petStyle.color} stroke="#8B4513" strokeWidth="1" />
-            <path d="M 90 30 L 95 15 L 85 25 Z" fill={petStyle.color} stroke="#8B4513" strokeWidth="1" />
+        {/* 액세서리 */}
+        {renderAccessories()}
             
-            {/* 고양이 표정 */}
-            {renderPetExpression(petStyle.expression)}
-            
-            {/* 고양이 코 */}
-            <circle cx="50" cy="55" r="2" fill="#FF6B9D" />
-            
-            {/* 고양이 수염 */}
-            <line x1="25" y1="50" x2="15" y2="45" stroke="#8B4513" strokeWidth="1" />
-            <line x1="25" y1="55" x2="15" y2="55" stroke="#8B4513" strokeWidth="1" />
-            <line x1="25" y1="60" x2="15" y2="65" stroke="#8B4513" strokeWidth="1" />
-            <line x1="95" y1="50" x2="105" y2="45" stroke="#8B4513" strokeWidth="1" />
-            <line x1="95" y1="55" x2="105" y2="55" stroke="#8B4513" strokeWidth="1" />
-            <line x1="95" y1="60" x2="105" y2="65" stroke="#8B4513" strokeWidth="1" />
+        {/* 표정 */}
+        {renderExpression()}
           </svg>
-        </div>
-      </div>
       
-      {/* 펫 정보 */}
-      <div className="space-y-2 text-center">
-        <div className="text-sm text-gray-600">감정: <span className="font-semibold text-blue-600">{emotion}</span></div>
-        <div className="text-sm text-gray-600">진화 단계: <span className="font-semibold text-green-600">{evolution}</span></div>
-        <div className="text-sm text-gray-600">성격: <span className="font-semibold text-purple-600">{personality}</span></div>
-        <div className="text-sm text-gray-600">생성일: <span className="font-semibold text-gray-600">{createdAt}</span></div>
+      <div className="mt-2 text-blue-700 font-semibold text-center max-w-xs">
+        {ment}
       </div>
-      
-      {/* 펫 상태 안내 */}
-      <div className="mt-4 p-3 bg-green-50 rounded-lg">
-        <p className="text-sm text-green-700">
-          🎉 축하합니다! 펫이 성공적으로 부화되었습니다. 계속해서 감정을 기록하여 펫을 성장시키세요!
-        </p>
-      </div>
+      <div className="text-sm text-gray-600 mt-2">현재 감정: <span className="font-semibold text-blue-600">{emotion}</span></div>
+      <div className="text-sm text-gray-600">진화 단계: <span className="font-semibold text-green-600">{evolution}</span></div>
     </div>
   );
 } 

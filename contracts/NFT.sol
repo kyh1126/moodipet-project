@@ -8,7 +8,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract MoodiPetNFT is Ownable, ERC721URIStorage {
     uint256 private _nextTokenId = 1;
     
-    // 감정 펫의 속성 구조체
+    // 감정 슬라임의 속성 구조체
     struct PetAttributes {
         string emotion;      // 감정 (우울, 기쁨, 화남, 평온 등)
         string color;        // 색깔
@@ -20,7 +20,7 @@ contract MoodiPetNFT is Ownable, ERC721URIStorage {
     // 토큰 ID별 속성 매핑
     mapping(uint256 => PetAttributes) public petAttributes;
     
-    // 사용자별 소유한 펫 수
+    // 사용자별 소유한 슬라임 수
     mapping(address => uint256) public userPetCount;
     
     // 이벤트
@@ -28,7 +28,7 @@ contract MoodiPetNFT is Ownable, ERC721URIStorage {
     
     constructor(address initialOwner) Ownable(initialOwner) ERC721("MoodiPet", "MDP") {}
     
-    // 감정 펫 민팅 함수
+    // 감정 슬라임 민팅 함수
     function mintMoodiPet(
         address to, 
         string memory uri,
@@ -56,13 +56,13 @@ contract MoodiPetNFT is Ownable, ERC721URIStorage {
         emit PetMinted(to, tokenId, _emotion, _color, _evolution);
     }
     
-    // 펫 속성 조회
+    // 슬라임 속성 조회
     function getPetAttributes(uint256 tokenId) public view returns (PetAttributes memory) {
         require(ownerOf(tokenId) != address(0), "Token does not exist");
         return petAttributes[tokenId];
     }
     
-    // 사용자의 모든 펫 조회
+    // 사용자의 모든 슬라임 조회
     function getUserPets(address user) public view returns (uint256[] memory) {
         uint256[] memory pets = new uint256[](userPetCount[user]);
         uint256 count = 0;
@@ -77,7 +77,7 @@ contract MoodiPetNFT is Ownable, ERC721URIStorage {
         return pets;
     }
     
-    // 펫 진화 업그레이드 (오너만 가능)
+    // 슬라임 진화 업그레이드 (오너만 가능)
     function evolvePet(uint256 tokenId, uint8 newEvolution) public onlyOwner {
         require(ownerOf(tokenId) != address(0), "Token does not exist");
         require(newEvolution > petAttributes[tokenId].evolution && newEvolution <= 5, "Invalid evolution level");

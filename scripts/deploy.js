@@ -1,7 +1,7 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-  console.log("=== MoodiPet 컨트랙트 배포 시작 ===");
+  console.log("=== MoodiPet 슬라임 컨트랙트 배포 시작 ===");
 
   // 배포자 계정 가져오기
   const [deployer] = await ethers.getSigners();
@@ -19,16 +19,16 @@ async function main() {
   console.log("HealingToken 배포 완료:", healingToken.address);
 
   // 2. MoodiPetNFT 배포
-  console.log("\n2. MoodiPetNFT 배포 중...");
+  console.log("\n2. MoodiPet 슬라임 NFT 배포 중...");
   const MoodiPetNFT = await ethers.getContractFactory("MoodiPetNFT");
   const moodiPetNFT = await MoodiPetNFT.deploy(deployer.address);
   await moodiPetNFT.deployed();
-  console.log("MoodiPetNFT 배포 완료:", moodiPetNFT.address);
+  console.log("MoodiPet 슬라임 NFT 배포 완료:", moodiPetNFT.address);
 
   // 배포 정보 출력
   console.log("\n=== 배포 완료 ===");
   console.log("HealingToken 주소:", healingToken.address);
-  console.log("MoodiPetNFT 주소:", moodiPetNFT.address);
+  console.log("MoodiPet 슬라임 NFT 주소:", moodiPetNFT.address);
   console.log("배포자 주소:", deployer.address);
 
   // 컨트랙트 검증 정보
@@ -36,11 +36,11 @@ async function main() {
   console.log("HealingToken 검증:");
   console.log(`npx hardhat verify --network ${network.name} ${healingToken.address} "${deployer.address}"`);
   
-  console.log("\nMoodiPetNFT 검증:");
+  console.log("\nMoodiPet 슬라임 NFT 검증:");
   console.log(`npx hardhat verify --network ${network.name} ${moodiPetNFT.address} "${deployer.address}"`);
 
   // 환경 변수 파일 생성
-  const envContent = `# MoodiPet Contract Addresses
+  const envContent = `# MoodiPet 슬라임 Contract Addresses
 HEALING_TOKEN_ADDRESS=${healingToken.address}
 MOODIPET_NFT_ADDRESS=${moodiPetNFT.address}
 DEPLOYER_ADDRESS=${deployer.address}

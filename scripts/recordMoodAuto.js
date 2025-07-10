@@ -12,7 +12,8 @@ async function main() {
   const [signer] = await ethers.getSigners();
   const healingToken = new ethers.Contract(healingTokenAddress, healingTokenAbi, signer);
 
-  for (let i = 0; i < 3; i++) {
+  // 더 많은 토큰을 지급하기 위해 10일 연속 기록
+  for (let i = 0; i < 10; i++) {
     // 감정 기록 트랜잭션 실행
     const tx = await healingToken.recordMood(signer.address, "기쁨");
     await tx.wait();
@@ -26,6 +27,10 @@ async function main() {
   // 연속 기록 일수 확인
   const days = await healingToken.getConsecutiveDays(signer.address);
   console.log("최종 연속 기록 일수:", days.toString());
+  
+  // 토큰 잔액 확인
+  const balance = await healingToken.balanceOf(signer.address);
+  console.log("최종 토큰 잔액:", balance.toString(), "HEAL");
 }
 
 main().catch((error) => {

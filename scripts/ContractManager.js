@@ -8,7 +8,7 @@ class ContractManager {
   constructor(contractAddress, contractType = "NFT") {
     this.contractAddress = contractAddress;
     this.contractType = contractType;
-    this.provider = new ethers.JsonRpcProvider("https://sepolia.base.org");
+    this.provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL || "http://localhost:8545");
     this.signer = new ethers.Wallet(process.env.TESTNET_PRIVATE_KEY, this.provider);
     
     // 컨트랙트 타입에 따라 다른 ABI 사용
