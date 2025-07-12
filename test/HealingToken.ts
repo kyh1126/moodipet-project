@@ -3,7 +3,7 @@ import { expect } from "chai";
 import hre from "hardhat";
 import { getAddress } from "viem";
 
-describe("HealingToken (힐링 토큰)", function () {
+describe("HealingToken (Healing Token)", function () {
   async function deployHealingTokenFixture() {
     const [owner, user] = await hre.viem.getWalletClients();
     const healingToken = await hre.viem.deployContract("HealingToken", [owner.account.address]);
@@ -11,11 +11,11 @@ describe("HealingToken (힐링 토큰)", function () {
   }
 
   describe("Deployment", function () {
-    it("올바른 오너를 설정한다", async function () {
+    it("Sets correct owner", async function () {
       const { healingToken, owner } = await loadFixture(deployHealingTokenFixture);
       expect(await healingToken.read.owner()).to.equal(getAddress(owner.account.address));
     });
-    it("이름과 심볼이 올바르다", async function () {
+    it("Has correct name and symbol", async function () {
       const { healingToken } = await loadFixture(deployHealingTokenFixture);
       expect(await healingToken.read.name()).to.equal("Healing Token");
       expect(await healingToken.read.symbol()).to.equal("HEAL");
@@ -23,10 +23,10 @@ describe("HealingToken (힐링 토큰)", function () {
   });
 
   describe("Mood Recording", function () {
-    it("감정 기록 시 보상을 지급한다", async function () {
+    it("Gives reward when recording emotion", async function () {
       const { healingToken, owner, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
-      const emotion = "우울";
+      const emotion = "sad";
       await healingToken.write.recordMood([userAddress, emotion]);
       const record = await healingToken.read.getUserMoodRecord([userAddress]);
       expect(record.consecutiveDays).to.equal(1n);
@@ -34,10 +34,10 @@ describe("HealingToken (힐링 토큰)", function () {
       const balance = await healingToken.read.balanceOf([userAddress]);
       expect(balance).to.equal(1n);
     });
-    it("오너만 감정 기록이 가능하다", async function () {
+    it("Only owner can record emotion", async function () {
       const { healingToken, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
-      const emotion = "기쁨";
+      const emotion = "happy";
       const healingTokenAsUser = await hre.viem.getContractAt("HealingToken", healingToken.address, {
         client: { wallet: user },
       });
@@ -45,11 +45,11 @@ describe("HealingToken (힐링 토큰)", function () {
         "OwnableUnauthorizedAccount"
       );
     });
-    it("연속 기록 일수를 올바르게 추적한다", async function () {
+    it("Correctly tracks consecutive recording days", async function () {
       const { healingToken, owner, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
       for (let i = 0; i < 7; i++) {
-        await healingToken.write.recordMood([userAddress, `감정${i}`]);
+        await healingToken.write.recordMood([userAddress, `emotion${i}`]);
         await hre.network.provider.send("evm_increaseTime", [86400]);
         await hre.network.provider.send("evm_mine");
       }
@@ -62,24 +62,24 @@ describe("HealingToken (힐링 토큰)", function () {
   });
 
   describe("Token Rewards", function () {
-    it("7일 연속 기록 시 보너스 토큰을 지급한다", async function () {
+    it("Gives bonus tokens for 7 consecutive days", async function () {
       const { healingToken, owner, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
       for (let i = 0; i < 7; i++) {
-        await healingToken.write.recordMood([userAddress, `감정${i}`]);
+        await healingToken.write.recordMood([userAddress, `emotion${i}`]);
         await hre.network.provider.send("evm_increaseTime", [86400]);
         await hre.network.provider.send("evm_mine");
       }
       const balance = await healingToken.read.balanceOf([userAddress]);
       expect(balance).to.equal(16n); // 6 + 10 bonus
     });
-    it("7일 연속 기록 달성 여부를 확인한다", async function () {
+    it("Checks if 7 consecutive days are completed", async function () {
       const { healingToken, owner, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
       let completed = await healingToken.read.hasCompletedWeek([userAddress]);
       expect(completed).to.be.false;
       for (let i = 0; i < 7; i++) {
-        await healingToken.write.recordMood([userAddress, `감정${i}`]);
+        await healingToken.write.recordMood([userAddress, `emotion${i}`]);
         await hre.network.provider.send("evm_increaseTime", [86400]);
         await hre.network.provider.send("evm_mine");
       }
@@ -89,22 +89,22 @@ describe("HealingToken (힐링 토큰)", function () {
   });
 
   describe("User Information", function () {
-    it("연속 기록 일수를 반환한다", async function () {
+    it("Returns consecutive recording days", async function () {
       const { healingToken, owner, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
       for (let i = 0; i < 3; i++) {
-        await healingToken.write.recordMood([userAddress, `감정${i}`]);
+        await healingToken.write.recordMood([userAddress, `emotion${i}`]);
         await hre.network.provider.send("evm_increaseTime", [86400]);
         await hre.network.provider.send("evm_mine");
       }
       const consecutiveDays = await healingToken.read.getConsecutiveDays([userAddress]);
       expect(consecutiveDays).to.equal(3n);
     });
-    it("총 기록 수를 반환한다", async function () {
+    it("Returns total record count", async function () {
       const { healingToken, owner, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
       for (let i = 0; i < 5; i++) {
-        await healingToken.write.recordMood([userAddress, `감정${i}`]);
+        await healingToken.write.recordMood([userAddress, `emotion${i}`]);
         await hre.network.provider.send("evm_increaseTime", [86400]);
         await hre.network.provider.send("evm_mine");
       }
@@ -114,7 +114,7 @@ describe("HealingToken (힐링 토큰)", function () {
   });
 
   describe("Owner Functions", function () {
-    it("오너가 토큰을 민팅할 수 있다", async function () {
+    it("Owner can mint tokens", async function () {
       const { healingToken, owner, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
       const amount = 100n;
@@ -122,7 +122,7 @@ describe("HealingToken (힐링 토큰)", function () {
       const balance = await healingToken.read.balanceOf([userAddress]);
       expect(balance).to.equal(amount);
     });
-    it("오너가 아닌 사용자는 토큰을 민팅할 수 없다", async function () {
+    it("Non-owner cannot mint tokens", async function () {
       const { healingToken, user } = await loadFixture(deployHealingTokenFixture);
       const userAddress = getAddress(user.account.address);
       const amount = 100n;

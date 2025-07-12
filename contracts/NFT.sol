@@ -8,27 +8,27 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 contract MoodiPetNFT is Ownable, ERC721URIStorage {
     uint256 private _nextTokenId = 1;
     
-    // 감정 슬라임의 속성 구조체
+    // Emotion slime attributes structure
     struct PetAttributes {
-        string emotion;      // 감정 (우울, 기쁨, 화남, 평온 등)
-        string color;        // 색깔
-        uint8 evolution;     // 진화 정도 (1-5)
-        uint256 createdAt;   // 생성 시간
-        string personality;  // 성격
+        string emotion;      // Emotion (sad, happy, angry, calm, etc.)
+        string color;        // Color
+        uint8 evolution;     // Evolution level (1-5)
+        uint256 createdAt;   // Creation time
+        string personality;  // Personality
     }
     
-    // 토큰 ID별 속성 매핑
+    // Token ID to attributes mapping
     mapping(uint256 => PetAttributes) public petAttributes;
     
-    // 사용자별 소유한 슬라임 수
+    // User's owned slime count
     mapping(address => uint256) public userPetCount;
     
-    // 이벤트
+    // Events
     event PetMinted(address indexed owner, uint256 indexed tokenId, string emotion, string color, uint8 evolution);
     
     constructor(address initialOwner) Ownable(initialOwner) ERC721("MoodiPet", "MDP") {}
     
-    // 감정 슬라임 민팅 함수
+    // Emotion slime minting function
     function mintMoodiPet(
         address to, 
         string memory uri,
@@ -56,13 +56,13 @@ contract MoodiPetNFT is Ownable, ERC721URIStorage {
         emit PetMinted(to, tokenId, _emotion, _color, _evolution);
     }
     
-    // 슬라임 속성 조회
+    // Slime attributes query
     function getPetAttributes(uint256 tokenId) public view returns (PetAttributes memory) {
         require(ownerOf(tokenId) != address(0), "Token does not exist");
         return petAttributes[tokenId];
     }
     
-    // 사용자의 모든 슬라임 조회
+    // Query all user's slimes
     function getUserPets(address user) public view returns (uint256[] memory) {
         uint256[] memory pets = new uint256[](userPetCount[user]);
         uint256 count = 0;
@@ -77,7 +77,7 @@ contract MoodiPetNFT is Ownable, ERC721URIStorage {
         return pets;
     }
     
-    // 슬라임 진화 업그레이드 (오너만 가능)
+    // Slime evolution upgrade (owner only)
     function evolvePet(uint256 tokenId, uint8 newEvolution) public onlyOwner {
         require(ownerOf(tokenId) != address(0), "Token does not exist");
         require(newEvolution > petAttributes[tokenId].evolution && newEvolution <= 5, "Invalid evolution level");

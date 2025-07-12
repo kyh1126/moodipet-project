@@ -3,7 +3,7 @@ import { expect } from "chai";
 import hre from "hardhat";
 import { getAddress } from "viem";
 
-describe("MoodiPetNFT (무디펫 NFT)", function () {
+describe("MoodiPetNFT (MoodiPet NFT)", function () {
   async function deployMoodiPetFixture() {
     const [owner, otherAccount] = await hre.viem.getWalletClients();
 
@@ -31,14 +31,14 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
   });
 
   describe("Minting MoodiPet", function () {
-    it("올바른 속성으로 MoodiPet 슬라임을 민팅할 수 있다", async function () {
+    it("Can mint MoodiPet slime with correct attributes", async function () {
       const { moodiPetNFT, owner } = await loadFixture(deployMoodiPetFixture);
       const recipient = getAddress(owner.account.address);
       const tokenURI = "ipfs://sample-uri";
-      const emotion = "우울";
-      const color = "파란색";
+      const emotion = "sad";
+      const color = "blue";
       const evolution = 1n;
-      const personality = "조용한";
+      const personality = "quiet";
 
       await moodiPetNFT.write.mintMoodiPet([recipient, tokenURI, emotion, color, evolution, personality]);
 
@@ -54,14 +54,14 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
       expect(attributes.personality).to.equal(personality);
     });
 
-    it("오너만 민팅할 수 있다", async function () {
+    it("Only owner can mint", async function () {
       const { moodiPetNFT, otherAccount } = await loadFixture(deployMoodiPetFixture);
       const recipient = getAddress(otherAccount.account.address);
       const tokenURI = "ipfs://unauthorized-uri";
-      const emotion = "기쁨";
-      const color = "노란색";
+      const emotion = "happy";
+      const color = "yellow";
       const evolution = 1n;
-      const personality = "활발한";
+      const personality = "energetic";
 
       const moodiPetNFTAsOtherAccount = await hre.viem.getContractAt("MoodiPetNFT", moodiPetNFT.address, {
         client: { wallet: otherAccount },
@@ -72,14 +72,14 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
       ).to.be.rejectedWith("OwnableUnauthorizedAccount");
     });
 
-    it("진화 레벨을 검증한다", async function () {
+    it("Validates evolution level", async function () {
       const { moodiPetNFT, owner } = await loadFixture(deployMoodiPetFixture);
       const recipient = getAddress(owner.account.address);
       const tokenURI = "ipfs://sample-uri";
-      const emotion = "화남";
-      const color = "빨간색";
+      const emotion = "angry";
+      const color = "red";
       const invalidEvolution = 6n; // Invalid evolution level
-      const personality = "화난";
+      const personality = "angry";
 
       await expect(
         moodiPetNFT.write.mintMoodiPet([recipient, tokenURI, emotion, color, invalidEvolution, personality])
@@ -88,14 +88,14 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
   });
 
   describe("Pet Attributes", function () {
-    it("올바른 슬라임 속성을 반환한다", async function () {
+    it("Returns correct slime attributes", async function () {
       const { moodiPetNFT, owner } = await loadFixture(deployMoodiPetFixture);
       const recipient = getAddress(owner.account.address);
       const tokenURI = "ipfs://sample-uri";
-      const emotion = "평온";
-      const color = "초록색";
+      const emotion = "calm";
+      const color = "green";
       const evolution = 3n;
-      const personality = "평온한";
+      const personality = "calm";
 
       await moodiPetNFT.write.mintMoodiPet([recipient, tokenURI, emotion, color, evolution, personality]);
 
@@ -107,7 +107,7 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
       expect(Number(attributes.createdAt)).to.be.greaterThan(0);
     });
 
-    it("존재하지 않는 토큰에 대해 오류를 반환한다", async function () {
+    it("Returns error for non-existent token", async function () {
       const { moodiPetNFT } = await loadFixture(deployMoodiPetFixture);
 
       await expect(moodiPetNFT.read.getPetAttributes([999n])).to.be.rejected;
@@ -115,14 +115,14 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
   });
 
   describe("User Pets", function () {
-    it("사용자 슬라임 목록을 반환한다", async function () {
+    it("Returns user slime list", async function () {
       const { moodiPetNFT, owner } = await loadFixture(deployMoodiPetFixture);
       const recipient = getAddress(owner.account.address);
       const tokenURI = "ipfs://sample-uri";
-      const emotion = "사랑";
-      const color = "분홍색";
+      const emotion = "love";
+      const color = "pink";
       const evolution = 2n;
-      const personality = "사랑스러운";
+      const personality = "lovely";
 
       await moodiPetNFT.write.mintMoodiPet([recipient, tokenURI, emotion, color, evolution, personality]);
 
@@ -133,14 +133,14 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
   });
 
   describe("Pet Evolution", function () {
-    it("오너가 슬라임을 진화시킬 수 있다", async function () {
+    it("Owner can evolve slime", async function () {
       const { moodiPetNFT, owner } = await loadFixture(deployMoodiPetFixture);
       const recipient = getAddress(owner.account.address);
       const tokenURI = "ipfs://sample-uri";
-      const emotion = "신남";
-      const color = "보라색";
+      const emotion = "excited";
+      const color = "purple";
       const evolution = 1n;
-      const personality = "에너지 넘치는";
+      const personality = "energetic";
 
       await moodiPetNFT.write.mintMoodiPet([recipient, tokenURI, emotion, color, evolution, personality]);
 
@@ -151,14 +151,14 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
       expect(BigInt(attributes.evolution)).to.equal(3n);
     });
 
-    it("잘못된 진화는 방지한다", async function () {
+    it("Prevents invalid evolution", async function () {
       const { moodiPetNFT, owner } = await loadFixture(deployMoodiPetFixture);
       const recipient = getAddress(owner.account.address);
       const tokenURI = "ipfs://sample-uri";
-      const emotion = "슬픔";
-      const color = "회색";
+      const emotion = "sad";
+      const color = "gray";
       const evolution = 2n;
-      const personality = "무기력한";
+      const personality = "lethargic";
 
       await moodiPetNFT.write.mintMoodiPet([recipient, tokenURI, emotion, color, evolution, personality]);
 
@@ -168,7 +168,7 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
   });
 
   describe("Ownership Transfer", function () {
-    it("오너가 소유권을 이전할 수 있다", async function () {
+    it("Owner can transfer ownership", async function () {
       const { moodiPetNFT, owner, otherAccount } = await loadFixture(deployMoodiPetFixture);
 
       await moodiPetNFT.write.transferOwnership([getAddress(otherAccount.account.address)]);
@@ -176,7 +176,7 @@ describe("MoodiPetNFT (무디펫 NFT)", function () {
       expect(await moodiPetNFT.read.owner()).to.equal(getAddress(otherAccount.account.address));
     });
 
-    it("오너가 아닌 사용자는 소유권을 이전할 수 없다", async function () {
+    it("Non-owner cannot transfer ownership", async function () {
       const { moodiPetNFT, otherAccount } = await loadFixture(deployMoodiPetFixture);
 
       const moodiPetNFTAsOtherAccount = await hre.viem.getContractAt("MoodiPetNFT", moodiPetNFT.address, {

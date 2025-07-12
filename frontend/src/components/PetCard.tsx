@@ -6,55 +6,55 @@ interface PetCardProps {
   ment?: string;
 }
 
-export default function PetCard({ emotion = "행복", evolution = 3, ment = "" }: PetCardProps) {
-  // 감정에 따른 슬라임 스타일 결정
+export default function PetCard({ emotion = "happy", evolution = 3, ment = "" }: PetCardProps) {
+  // Determine slime style based on emotion
   const getSlimeStyle = (emotion: string) => {
     switch (emotion) {
-      case "행복":
+      case "happy":
         return {
-          color: "#FFD700", // 골드
+          color: "#FFD700", // Gold
           eyeColor: "#333",
           mouthType: "happy",
           accessories: ["crown", "sparkles"]
         };
-      case "우울":
+      case "sad":
         return {
-          color: "#87CEEB", // 하늘색
+          color: "#87CEEB", // Sky blue
           eyeColor: "#333",
           mouthType: "sad",
           accessories: ["tear", "cloud"]
         };
-      case "분노":
+      case "angry":
         return {
-          color: "#FF6B6B", // 빨간색
+          color: "#FF6B6B", // Red
           eyeColor: "#FF0000",
           mouthType: "angry",
           accessories: ["fire", "lightning"]
         };
-      case "불안":
+      case "anxious":
         return {
-          color: "#FFB347", // 주황색
+          color: "#FFB347", // Orange
           eyeColor: "#333",
           mouthType: "worried",
           accessories: ["question", "sweat"]
         };
-      case "설렘":
+      case "excited":
         return {
-          color: "#98FB98", // 연두색
+          color: "#98FB98", // Light green
           eyeColor: "#333",
           mouthType: "excited",
           accessories: ["star", "rainbow"]
         };
-      case "지루함":
+      case "bored":
         return {
-          color: "#DDA0DD", // 연보라색
+          color: "#DDA0DD", // Light purple
           eyeColor: "#333",
           mouthType: "bored",
           accessories: ["zzz", "bubble"]
         };
-      case "허무":
+      case "empty":
         return {
-          color: "#D3D3D3", // 회색
+          color: "#D3D3D3", // Gray
           eyeColor: "#666",
           mouthType: "empty",
           accessories: ["void", "dots"]
@@ -71,7 +71,7 @@ export default function PetCard({ emotion = "행복", evolution = 3, ment = "" }
 
   const slimeStyle = getSlimeStyle(emotion);
 
-  // 액세서리 렌더링 함수
+  // Accessory rendering function
   const renderAccessories = () => {
     const { accessories } = slimeStyle;
     
@@ -136,17 +136,17 @@ export default function PetCard({ emotion = "행복", evolution = 3, ment = "" }
         );
   };
 
-  // 표정 렌더링 함수
+  // Expression rendering function
   const renderExpression = () => {
     const { mouthType } = slimeStyle;
     
         return (
           <>
-        {/* 눈 */}
+        {/* Eyes */}
         <circle cx="38" cy="55" r="4" fill={slimeStyle.eyeColor} />
         <circle cx="62" cy="55" r="4" fill={slimeStyle.eyeColor} />
         
-        {/* 입 */}
+        {/* Mouth */}
         {mouthType === "happy" && (
           <ellipse cx="50" cy="65" rx="8" ry="4" fill="#fff" />
         )}
@@ -177,11 +177,11 @@ export default function PetCard({ emotion = "행복", evolution = 3, ment = "" }
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 border border-blue-100 flex flex-col items-center">
-              <div className="font-bold text-blue-700 text-lg mb-4">나의 MoodiPet 슬라임 완성체</div>
+              <div className="font-bold text-blue-700 text-lg mb-4">My MoodiPet Slime Complete Form</div>
       
-      {/* 슬라임 SVG */}
+      {/* Slime SVG */}
       <svg width="100" height="80" viewBox="0 0 100 80">
-        {/* 슬라임 본체 */}
+        {/* Slime body */}
         <ellipse 
           cx="50" 
           cy="55" 
@@ -192,18 +192,18 @@ export default function PetCard({ emotion = "행복", evolution = 3, ment = "" }
               strokeWidth="2"
             />
             
-        {/* 액세서리 */}
+        {/* Accessories */}
         {renderAccessories()}
             
-        {/* 표정 */}
+        {/* Expression */}
         {renderExpression()}
           </svg>
       
       <div className="mt-2 text-blue-700 font-semibold text-center max-w-xs">
         {ment}
       </div>
-      <div className="text-sm text-gray-600 mt-2">현재 감정: <span className="font-semibold text-blue-600">{emotion}</span></div>
-      <div className="text-sm text-gray-600">진화 단계: <span className="font-semibold text-green-600">{evolution}</span></div>
+      <div className="text-sm text-gray-600 mt-2">Current emotion: <span className="font-semibold text-blue-600">{emotion}</span></div>
+      <div className="text-sm text-gray-600">Evolution stage: <span className="font-semibold text-green-600">{evolution}</span></div>
     </div>
   );
 } 

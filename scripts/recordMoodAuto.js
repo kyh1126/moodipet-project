@@ -1,36 +1,36 @@
 const { ethers, network } = require("hardhat");
 require("dotenv").config();
 
-// HealingToken ABI 및 주소
+// HealingToken ABI and address
 const healingTokenJson = require("../frontend/src/lib/abi/HealingToken.json");
 const healingTokenAbi = healingTokenJson.abi;
-// 임시로 하드코딩 (테스트 후 환경 변수로 복구)
+// Temporarily hardcoded (restore to environment variable after testing)
 const healingTokenAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 async function main() {
-  // Hardhat의 첫 번째 계정 사용
+  // Use Hardhat's first account
   const [signer] = await ethers.getSigners();
   const healingToken = new ethers.Contract(healingTokenAddress, healingTokenAbi, signer);
 
-  // 더 많은 토큰을 지급하기 위해 10일 연속 기록
+  // Record for 10 consecutive days to earn more tokens
   for (let i = 0; i < 10; i++) {
-    // 감정 기록 트랜잭션 실행
-    const tx = await healingToken.recordMood(signer.address, "기쁨");
+    // Execute emotion recording transaction
+    const tx = await healingToken.recordMood(signer.address, "happy");
     await tx.wait();
-    console.log(`Day ${i + 1}: recordMood 트랜잭션 완료`);
+    console.log(`Day ${i + 1}: recordMood transaction completed`);
 
-    // 하루(86400초) 시간 이동 및 블록 마이닝
+    // Move time by one day (86400 seconds) and mine block
     await network.provider.send("evm_increaseTime", [86400]);
     await network.provider.send("evm_mine");
   }
 
-  // 연속 기록 일수 확인
+  // Check consecutive recording days
   const days = await healingToken.getConsecutiveDays(signer.address);
-  console.log("최종 연속 기록 일수:", days.toString());
+  console.log("Final consecutive recording days:", days.toString());
   
-  // 토큰 잔액 확인
+  // Check token balance
   const balance = await healingToken.balanceOf(signer.address);
-  console.log("최종 토큰 잔액:", balance.toString(), "HEAL");
+  console.log("Final token balance:", balance.toString(), "HEAL");
 }
 
 main().catch((error) => {

@@ -5,7 +5,7 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract HealingToken is ERC20, Ownable {
-    // 사용자별 감정 기록 정보
+    // User emotion recording information
     struct MoodRecord {
         uint256 lastRecordTime;
         uint256 consecutiveDays;
@@ -14,29 +14,29 @@ contract HealingToken is ERC20, Ownable {
     
     mapping(address => MoodRecord) public moodRecords;
     
-    // 이벤트
+    // Events
     event MoodRecorded(address indexed user, string emotion, uint256 consecutiveDays);
     event TokensRewarded(address indexed user, uint256 amount, string reason);
     
     constructor(address initialOwner) Ownable(initialOwner) ERC20("Healing Token", "HEAL") {}
     
-    // 감정 기록 (오너만 호출 가능)
-    function recordMood(address user, string memory emotion) public onlyOwner {
+    // Emotion recording (public)
+    function recordMood(address user, string memory emotion) public {
         MoodRecord storage record = moodRecords[user];
         uint256 currentTime = block.timestamp;
         
-        // 하루가 지났는지 확인 (86400초 = 24시간)
+        // Check if a day has passed (86400 seconds = 24 hours)
         if (currentTime - record.lastRecordTime >= 86400) {
             record.consecutiveDays++;
             record.lastRecordTime = currentTime;
         } else if (currentTime - record.lastRecordTime < 86400) {
-            // 같은 날 중복 기록 방지
+            // Prevent duplicate recording on the same day
             return;
         }
         
         record.totalRecords++;
         
-        // 보상 지급
+        // Reward distribution
         uint256 reward = calculateReward(record.consecutiveDays);
         if (reward > 0) {
             _mint(user, reward);
@@ -46,38 +46,38 @@ contract HealingToken is ERC20, Ownable {
         emit MoodRecorded(user, emotion, record.consecutiveDays);
     }
     
-    // 보상 계산
+    // Reward calculation
     function calculateReward(uint256 consecutiveDays) internal pure returns (uint256) {
         if (consecutiveDays == 7) {
-            return 10; // 7일 연속 기록 시 10 토큰
+            return 10; // 10 tokens for 7 consecutive days
         } else if (consecutiveDays % 7 == 0) {
-            return 10; // 7의 배수일 때마다 10 토큰
+            return 10; // 10 tokens for every multiple of 7
         } else {
-            return 1; // 기본 1 토큰
+            return 1; // Default 1 token
         }
     }
     
-    // 사용자 정보 조회
+    // User information query
     function getUserMoodRecord(address user) public view returns (MoodRecord memory) {
         return moodRecords[user];
     }
     
-    // 연속 기록일수 조회
+    // Consecutive recording days query
     function getConsecutiveDays(address user) public view returns (uint256) {
         return moodRecords[user].consecutiveDays;
     }
     
-    // 총 기록 수 조회
+    // Total record count query
     function getTotalRecords(address user) public view returns (uint256) {
         return moodRecords[user].totalRecords;
     }
     
-    // 7일 연속 기록 달성 여부 확인
+    // Check if 7-day consecutive record is achieved
     function hasCompletedWeek(address user) public view returns (bool) {
         return moodRecords[user].consecutiveDays >= 7;
     }
     
-    // 오너가 토큰 발행 (긴급 상황용)
+    // Owner token minting (for emergency situations)
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }

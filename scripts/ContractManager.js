@@ -11,30 +11,30 @@ class ContractManager {
     this.provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL || "http://localhost:8545");
     this.signer = new ethers.Wallet(process.env.TESTNET_PRIVATE_KEY, this.provider);
     
-    // 컨트랙트 타입에 따라 다른 ABI 사용
+    // Use different ABI based on contract type
     const abi = contractType === "NFT" ? nftAbi : healingTokenAbi;
     
     this.writeContract = new ethers.Contract(contractAddress, abi, this.signer);
     this.contract = new ethers.Contract(contractAddress, abi, this.provider);
   }
 
-  // NFT 관련 함수들
+  // NFT related functions
   async mintMoodiPet(to, uri, emotion, color, evolution, personality) {
     try {
-      console.log(`MoodiPet NFT를 ${to}에게 민팅합니다.`);
-      console.log(`속성: 감정=${emotion}, 색상=${color}, 진화=${evolution}, 성격=${personality}`);
+      console.log(`Minting MoodiPet NFT to ${to}.`);
+      console.log(`Attributes: emotion=${emotion}, color=${color}, evolution=${evolution}, personality=${personality}`);
       const tx = await this.writeContract.mintMoodiPet(to, uri, emotion, color, evolution, personality);
       await tx.wait();
-      console.log("MoodiPet NFT 민팅 완료");
+      console.log("MoodiPet NFT minting completed");
     } catch (error) {
-      console.error("mintMoodiPet 오류:", error);
+      console.error("mintMoodiPet error:", error);
     }
   }
 
   async getPetAttributes(tokenId) {
     try {
       const attributes = await this.contract.getPetAttributes(tokenId);
-      console.log("펫 속성:", {
+      console.log("Pet attributes:", {
         emotion: attributes.emotion,
         color: attributes.color,
         evolution: attributes.evolution,
@@ -43,107 +43,107 @@ class ContractManager {
       });
       return attributes;
     } catch (error) {
-      console.error("getPetAttributes 오류:", error);
+      console.error("getPetAttributes error:", error);
     }
   }
 
   async getUserPets(userAddress) {
     try {
       const pets = await this.contract.getUserPets(userAddress);
-      console.log(`사용자 ${userAddress}의 펫 수: ${pets.length}, 목록:`, pets);
+      console.log(`User ${userAddress} pet count: ${pets.length}, list:`, pets);
       return pets;
     } catch (error) {
-      console.error("getUserPets 오류:", error);
+      console.error("getUserPets error:", error);
     }
   }
 
   async evolvePet(tokenId, newEvolution) {
     try {
-      console.log(`펫 ${tokenId}를 진화 레벨 ${newEvolution}로 진화시킵니다.`);
+      console.log(`Evolving pet ${tokenId} to evolution level ${newEvolution}.`);
       const tx = await this.writeContract.evolvePet(tokenId, newEvolution);
       await tx.wait();
-      console.log("펫 진화 완료");
+      console.log("Pet evolution completed");
     } catch (error) {
-      console.error("evolvePet 오류:", error);
+      console.error("evolvePet error:", error);
     }
   }
 
-  // Healing Token 관련 함수들
+  // Healing Token related functions
   async recordMood(userAddress, emotion) {
     try {
-      console.log(`사용자 ${userAddress}의 감정 기록: ${emotion}`);
+      console.log(`Recording emotion for user ${userAddress}: ${emotion}`);
       const tx = await this.writeContract.recordMood(userAddress, emotion);
       await tx.wait();
-      console.log("감정 기록 완료");
+      console.log("Emotion recording completed");
     } catch (error) {
-      console.error("recordMood 오류:", error);
+      console.error("recordMood error:", error);
     }
   }
 
   async getUserMoodRecord(userAddress) {
     try {
       const record = await this.contract.getUserMoodRecord(userAddress);
-      console.log("사용자 감정 기록:", {
-        마지막기록시간: new Date(record.lastRecordTime * 1000).toLocaleString(),
-        연속일수: record.consecutiveDays.toString(),
-        총기록수: record.totalRecords.toString()
+      console.log("User emotion record:", {
+        lastRecordTime: new Date(record.lastRecordTime * 1000).toLocaleString(),
+        consecutiveDays: record.consecutiveDays.toString(),
+        totalRecords: record.totalRecords.toString()
       });
       return record;
     } catch (error) {
-      console.error("getUserMoodRecord 오류:", error);
+      console.error("getUserMoodRecord error:", error);
     }
   }
 
   async getConsecutiveDays(userAddress) {
     try {
       const days = await this.contract.getConsecutiveDays(userAddress);
-      console.log(`사용자 ${userAddress}의 연속 기록 일수: ${days}`);
+      console.log(`User ${userAddress} consecutive recording days: ${days}`);
       return days;
     } catch (error) {
-      console.error("getConsecutiveDays 오류:", error);
+      console.error("getConsecutiveDays error:", error);
     }
   }
 
   async hasCompletedWeek(userAddress) {
     try {
       const completed = await this.contract.hasCompletedWeek(userAddress);
-      console.log(`사용자 ${userAddress}의 7일 연속 기록 달성 여부: ${completed}`);
+      console.log(`User ${userAddress} 7-day consecutive record achievement: ${completed}`);
       return completed;
     } catch (error) {
-      console.error("hasCompletedWeek 오류:", error);
+      console.error("hasCompletedWeek error:", error);
     }
   }
 
-  // 기존 함수들 (하위 호환성)
+  // Legacy functions (backward compatibility)
   async transferOwnership(newOwner) {
     try {
-      console.log(`소유권을 ${newOwner}에게 이전합니다...`);
+      console.log(`Transferring ownership to ${newOwner}...`);
       const tx = await this.writeContract.transferOwnership(newOwner);
       await tx.wait();
-      console.log("소유권 이전 완료");
+      console.log("Ownership transfer completed");
     } catch (error) {
-      console.error("transferOwnership 오류:", error);
+      console.error("transferOwnership error:", error);
     }
   }
 
   async safeMint(to, uri) {
     try {
-      console.log(`NFT를 ${to}에게 민팅합니다. URI: ${uri}`);
+      console.log(`Minting NFT to ${to}. URI: ${uri}`);
       const tx = await this.writeContract.safeMint(to, uri);
       await tx.wait();
-      console.log("NFT 민팅 완료");
+      console.log("NFT minting completed");
     } catch (error) {
-      console.error("safeMint 오류:", error);
+      console.error("safeMint error:", error);
     }
   }
 
   async getOwner() {
     try {
       const owner = await this.contract.owner();
-      console.log("현재 소유자:", owner);
+      console.log("Current owner:", owner);
       return owner;
     } catch (error) {
-      console.error("getOwner 오류:", error);
+      console.error("getOwner error:", error);
     }
   }
 
@@ -153,7 +153,7 @@ class ContractManager {
       console.log("URI:", uri);
       return uri;
     } catch (error) {
-      console.error("getURI 오류:", error);
+      console.error("getURI error:", error);
     }
   }
 }

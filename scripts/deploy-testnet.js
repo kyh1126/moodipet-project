@@ -2,43 +2,43 @@ const { ethers } = require("hardhat");
 require("dotenv").config();
 
 async function main() {
-  console.log("=== 테스트넷 환경 MoodiPet 슬라임 컨트랙트 배포 시작 ===");
+  console.log("=== Testnet Environment MoodiPet Slime Contract Deployment Started ===");
   
   const [deployer] = await ethers.getSigners();
-  console.log(`배포자 주소: ${deployer.address}`);
-  console.log(`배포자 잔액: ${ethers.formatEther(await deployer.provider.getBalance(deployer.address))} ETH`);
+  console.log(`Deployer address: ${deployer.address}`);
+  console.log(`Deployer balance: ${ethers.formatEther(await deployer.provider.getBalance(deployer.address))} ETH`);
 
-  // 1. HealingToken 배포
-  console.log("\n1. HealingToken 배포 중...");
+  // 1. Deploy HealingToken
+  console.log("\n1. Deploying HealingToken...");
   const HealingToken = await ethers.getContractFactory("HealingToken");
   const healingToken = await HealingToken.deploy(deployer.address);
   await healingToken.waitForDeployment();
   const healingTokenAddress = await healingToken.getAddress();
-  console.log(`HealingToken 배포 완료: ${healingTokenAddress}`);
+  console.log(`HealingToken deployment completed: ${healingTokenAddress}`);
 
-  // 2. MoodiPet 슬라임 NFT 배포
-  console.log("\n2. MoodiPet 슬라임 NFT 배포 중...");
+  // 2. Deploy MoodiPet Slime NFT
+  console.log("\n2. Deploying MoodiPet Slime NFT...");
   const MoodiPetNFT = await ethers.getContractFactory("MoodiPetNFT");
   const moodiPetNFT = await MoodiPetNFT.deploy(deployer.address);
   await moodiPetNFT.waitForDeployment();
   const moodiPetNFTAddress = await moodiPetNFT.getAddress();
-  console.log(`MoodiPet 슬라임 NFT 배포 완료: ${moodiPetNFTAddress}`);
+  console.log(`MoodiPet Slime NFT deployment completed: ${moodiPetNFTAddress}`);
 
-  console.log("\n=== 테스트넷 배포 완료 ===");
-  console.log(`HealingToken 주소: ${healingTokenAddress}`);
-  console.log(`MoodiPet 슬라임 NFT 주소: ${moodiPetNFTAddress}`);
-  console.log(`배포자 주소: ${deployer.address}`);
+  console.log("\n=== Testnet Deployment Completed ===");
+  console.log(`HealingToken address: ${healingTokenAddress}`);
+  console.log(`MoodiPet Slime NFT address: ${moodiPetNFTAddress}`);
+  console.log(`Deployer address: ${deployer.address}`);
 
-  // 컨트랙트 검증 명령어
-  console.log("\n=== 컨트랙트 검증 명령어 ===");
-  console.log(`HealingToken 검증:`);
+  // Contract verification commands
+  console.log("\n=== Contract Verification Commands ===");
+  console.log(`HealingToken verification:`);
   console.log(`npx hardhat verify --network baseSepoliaTestnet ${healingTokenAddress} "${deployer.address}"`);
-  console.log(`\nMoodiPet 슬라임 NFT 검증:`);
+  console.log(`\nMoodiPet Slime NFT verification:`);
   console.log(`npx hardhat verify --network baseSepoliaTestnet ${moodiPetNFTAddress} "${deployer.address}"`);
 
-  // 환경변수 파일 업데이트
-  console.log("\n=== 테스트넷 환경변수 설정 ===");
-  console.log(`다음 내용을 .env 파일에 추가하세요:`);
+  // Environment variables file update
+  console.log("\n=== Testnet Environment Variables Setup ===");
+  console.log(`Add the following content to your .env file:`);
   console.log(`NEXT_PUBLIC_HEALING_TOKEN_ADDRESS=${healingTokenAddress}`);
   console.log(`NEXT_PUBLIC_MOODIPET_NFT_ADDRESS=${moodiPetNFTAddress}`);
   console.log(`TESTNET_PRIVATE_KEY=${process.env.TESTNET_PRIVATE_KEY}`);

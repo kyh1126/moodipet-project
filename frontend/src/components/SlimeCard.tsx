@@ -6,55 +6,55 @@ interface SlimeCardProps {
   ment?: string;
 }
 
-export default function SlimeCard({ emotion = "행복", evolution = 2, ment = "" }: SlimeCardProps) {
-  // 감정에 따른 슬라임 색상과 표정 결정
+export default function SlimeCard({ emotion = "happy", evolution = 2, ment = "" }: SlimeCardProps) {
+  // Determine slime color and expression based on emotion
   const getSlimeStyle = (emotion: string) => {
     switch (emotion) {
-      case "행복":
+      case "happy":
         return {
-          color: "#FFD700", // 골드
+          color: "#FFD700", // Gold
           eyeColor: "#333",
           mouthType: "happy",
           eyeStyle: "normal"
         };
-      case "우울":
+      case "sad":
         return {
-          color: "#87CEEB", // 하늘색
+          color: "#87CEEB", // Sky blue
           eyeColor: "#333",
           mouthType: "sad",
           eyeStyle: "droopy"
         };
-      case "분노":
+      case "angry":
         return {
-          color: "#FF6B6B", // 빨간색
+          color: "#FF6B6B", // Red
           eyeColor: "#FF0000",
           mouthType: "angry",
           eyeStyle: "angry"
         };
-      case "불안":
+      case "anxious":
         return {
-          color: "#FFB347", // 주황색
+          color: "#FFB347", // Orange
           eyeColor: "#333",
           mouthType: "worried",
           eyeStyle: "worried"
         };
-      case "설렘":
+      case "excited":
         return {
-          color: "#98FB98", // 연두색
+          color: "#98FB98", // Light green
           eyeColor: "#333",
           mouthType: "excited",
           eyeStyle: "sparkly"
         };
-      case "지루함":
+      case "bored":
         return {
-          color: "#DDA0DD", // 연보라색
+          color: "#DDA0DD", // Light purple
           eyeColor: "#333",
           mouthType: "bored",
           eyeStyle: "bored"
         };
-      case "허무":
+      case "empty":
         return {
-          color: "#D3D3D3", // 회색
+          color: "#D3D3D3", // Gray
           eyeColor: "#666",
           mouthType: "empty",
           eyeStyle: "empty"
@@ -71,13 +71,13 @@ export default function SlimeCard({ emotion = "행복", evolution = 2, ment = ""
 
   const slimeStyle = getSlimeStyle(emotion);
 
-  // 표정 렌더링 함수
+  // Expression rendering function
   const renderExpression = () => {
     const { eyeStyle, mouthType } = slimeStyle;
     
     return (
       <>
-        {/* 눈 */}
+        {/* Eyes */}
         {eyeStyle === "normal" && (
           <>
             <circle cx="38" cy="55" r="4" fill={slimeStyle.eyeColor} />
@@ -123,7 +123,7 @@ export default function SlimeCard({ emotion = "행복", evolution = 2, ment = ""
           </>
         )}
 
-        {/* 입 */}
+        {/* Mouth */}
         {mouthType === "happy" && (
           <ellipse cx="50" cy="65" rx="8" ry="4" fill="#fff" />
         )}
@@ -154,9 +154,9 @@ export default function SlimeCard({ emotion = "행복", evolution = 2, ment = ""
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-6 border border-blue-100 flex flex-col items-center">
-      <div className="font-bold text-blue-700 text-lg mb-4">나의 MoodiPet 슬라임</div>
+      <div className="font-bold text-blue-700 text-lg mb-4">My MoodiPet Slime</div>
       
-      {/* 슬라임 SVG */}
+      {/* Slime SVG */}
       <svg width="100" height="80" viewBox="0 0 100 80">
         <ellipse 
           cx="50" 
@@ -173,8 +173,8 @@ export default function SlimeCard({ emotion = "행복", evolution = 2, ment = ""
       <div className="mt-2 text-blue-700 font-semibold text-center max-w-xs">
         {ment}
       </div>
-      <div className="text-sm text-gray-600 mt-2">현재 감정: <span className="font-semibold text-blue-600">{emotion}</span></div>
-      <div className="text-sm text-gray-600">진화 단계: <span className="font-semibold text-green-600">{evolution}</span></div>
+      <div className="text-sm text-gray-600 mt-2">Current emotion: <span className="font-semibold text-blue-600">{emotion}</span></div>
+      <div className="text-sm text-gray-600">Evolution stage: <span className="font-semibold text-green-600">{evolution}</span></div>
     </div>
   );
 } 
