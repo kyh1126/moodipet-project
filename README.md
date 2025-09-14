@@ -149,14 +149,3 @@ NEXT_PUBLIC_MOODIPET_NFT_ADDRESS=0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
 DEBUG=* npx hardhat run scripts/deploy-local.js --network localhost
 ```
 
-## 📄 라이선스
-
-MIT License
-
-## 🤝 기여하기
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
